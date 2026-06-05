@@ -1,4 +1,4 @@
-﻿using B2B.Entities;
+﻿using B2B.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
