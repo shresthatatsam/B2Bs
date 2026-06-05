@@ -10,7 +10,9 @@
 
         public string BusinessName { get; set; }
 
-        public string SellerType { get; set; }
+        public Guid SellerTypeId { get; set; }
+
+        public SellerType SellerType { get; set; }
 
         public string Description { get; set; }
 
