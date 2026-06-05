@@ -1,5 +1,6 @@
 using B2B.Data;
 using B2B.Data.Seed;
+using B2B.Infrastructure.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddApplicationServices();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
