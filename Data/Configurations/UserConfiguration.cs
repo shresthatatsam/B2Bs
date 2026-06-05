@@ -1,4 +1,4 @@
-﻿using B2B.Entities.User;
+﻿using B2B.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,13 +23,6 @@ namespace B2B.Data.Configurations
             builder.Property(u => u.PasswordHash)
                    .IsRequired()
                    .HasMaxLength(500); // Hashes (like BCrypt or Identity) need a healthy buffer
-
-            // 3. Enum Storage Strategy
-            // Stores the role as string text (e.g., "Admin") instead of raw numbers (e.g., 0)
-            builder.Property(u => u.Role)
-                   .HasConversion<string>()
-                   .IsRequired()
-                   .HasMaxLength(30);
 
             // 4. Default Values
             // Let the database generate the creation timestamp automatically on insert
