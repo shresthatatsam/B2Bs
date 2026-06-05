@@ -49,7 +49,7 @@ namespace B2B.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest dto)
         {
-            var user = await _context.Users
+            var user = await _context.Users.Include(x=>x.Role)
                 .FirstOrDefaultAsync(x => x.Email == dto.Email);
 
             if (user == null)
@@ -70,7 +70,7 @@ namespace B2B.Controllers
                     user.Id,
                     user.FullName,
                     user.Email,
-                    user.Role
+                    user.Role.Name
                 }
             });
         }
