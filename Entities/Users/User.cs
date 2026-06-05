@@ -1,6 +1,6 @@
 ﻿using B2B.Enums;
 
-namespace B2B.Entities
+namespace B2B.Entities.Users
 {
     public class User
     {
@@ -12,7 +12,9 @@ namespace B2B.Entities
 
         public string PasswordHash { get; set; }
 
-        public UserRole Role { get; set; } //Enum to define user roles (Admin, Customer, Seller)
+        public Guid RoleId { get; set; }   // FK to Role
+
+        public Role Role { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

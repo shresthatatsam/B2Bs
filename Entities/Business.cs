@@ -1,4 +1,6 @@
-﻿namespace B2B.Entities
+﻿using B2B.Entities.Users;
+
+namespace B2B.Entities
 {
     public class Business
     {
