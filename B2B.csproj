@@ -22,10 +22,6 @@
     <Folder Include="Middleware\" />
     <Folder Include="Authentication\" />
     <Folder Include="Uploads\" />
-    <Folder Include="Repositories\Interfaces\" />
-    <Folder Include="Repositories\Implementations\" />
-    <Folder Include="Services\Interfaces\" />
-    <Folder Include="Services\Implementations\" />
   </ItemGroup>
 
 </Project>
