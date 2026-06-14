@@ -13,7 +13,7 @@ namespace B2B.Infrastructure.DependencyInjection
             // Helpers
             services.AddScoped<JwtHelper>();
             services.AddScoped<IRoleService, RoleService>();
-
+            services.AddScoped<ISellerTypeService, SellerTypeService>();
             // later you will add:
             // services.AddScoped<IProductService, ProductService>();
             // services.AddScoped<IAuthService, AuthService>();

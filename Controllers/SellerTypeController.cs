@@ -1,4 +1,5 @@
-﻿using B2B.Entities.Users;
+﻿using B2B.Entities;
+using B2B.Entities.Users;
 using B2B.Services.Implementations;
 using B2B.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +8,11 @@ namespace B2B.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RoleController : ControllerBase
+    public class SellerTypeController : ControllerBase
     {
-        private readonly IRoleService _service;
+        private readonly ISellerTypeService _service;
 
-        public RoleController(IRoleService service)
+        public SellerTypeController(ISellerTypeService service)
         {
             _service = service;
         }
@@ -21,16 +22,16 @@ namespace B2B.Controllers
             => Ok(await _service.GetAll());
 
         [HttpPost]
-        public async Task<IActionResult> Create(Role role)
+        public async Task<IActionResult> Create(SellerType sellerType)
         {
-            await _service.Create(role);
+            await _service.Create(sellerType);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Role role)
+        public async Task<IActionResult> Update(SellerType sellerType)
         {
-            await _service.Update(role);
+            await _service.Update(sellerType);
             return Ok();
         }
 

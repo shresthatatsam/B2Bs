@@ -1,5 +1,6 @@
 ﻿using B2B.Data;
 using B2B.DTOs.RequestDTOs.User;
+using B2B.Entities;
 using B2B.Entities.Users;
 using B2B.Helpers;
 using Microsoft.AspNetCore.Identity.Data;
@@ -36,12 +37,21 @@ namespace B2B.Controllers
                 FullName = dto.FullName,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                RoleId = dto.Role    
+                RoleId = dto.RoleId    
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var business = new Business
+            {
+                UserId = user.Id,
+                BusinessName = dto.BusinessName,
+                SellerTypeId = dto.SellerTypeId
+
+            };
+            _context.Businesses.Add(business);
+            await _context.SaveChangesAsync();
             return Ok("User registered successfully");
         }
 
