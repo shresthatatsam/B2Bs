@@ -21,7 +21,7 @@ namespace B2B.Services.Implementations
             IRepository<ProductImage> imageRepo)
         {
             _service = service;
-            _imageRepo = imageRepo;
+            _imageRepos = imageRepos;
             _imageService = imageService;
             _imageRepo = imageRepo;
         }
@@ -56,7 +56,6 @@ namespace B2B.Services.Implementations
 
                     await _imageRepos.CreateAsync(new ProductImage
                     {
-                        Id = Guid.NewGuid(),
                         ProductId = product.Id,
                         ImageUrl = url
                     });
