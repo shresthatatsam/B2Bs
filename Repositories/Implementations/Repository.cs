@@ -1,6 +1,7 @@
 ﻿using B2B.Data;
 using B2B.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace B2B.Repositories.Implementations
 {
@@ -32,5 +33,10 @@ namespace B2B.Repositories.Implementations
 
         public async Task SaveAsync()
             => await _context.SaveChangesAsync();
+
+        public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
     }
 }

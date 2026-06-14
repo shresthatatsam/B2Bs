@@ -1,4 +1,6 @@
-﻿namespace B2B.Repositories.Interfaces
+﻿using System.Linq.Expressions;
+
+namespace B2B.Repositories.Interfaces
 {
     public interface IGenericService<T> where T : class
     {

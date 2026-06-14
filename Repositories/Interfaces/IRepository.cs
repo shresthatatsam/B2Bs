@@ -1,4 +1,6 @@
-﻿namespace B2B.Repositories.Interfaces
+﻿using System.Linq.Expressions;
+
+namespace B2B.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
     {
@@ -8,5 +10,6 @@
         void Update(T entity);
         void Delete(T entity);
         Task SaveAsync();
+        Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }

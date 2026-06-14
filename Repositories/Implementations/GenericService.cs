@@ -1,4 +1,6 @@
-﻿using B2B.Repositories.Interfaces;
+﻿
+
+using B2B.Repositories.Interfaces;
 
 namespace B2B.Repositories.Implementations
 {
@@ -38,5 +40,7 @@ namespace B2B.Repositories.Implementations
                 await _repo.SaveAsync();
             }
         }
+
+       
     }
 }
