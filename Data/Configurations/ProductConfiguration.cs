@@ -37,6 +37,7 @@ namespace B2B.Data.Configurations
             builder.HasOne(p => p.Business)
                    .WithMany() // Add ICollection<Product> inside Business if you want to link the other way later
                    .HasForeignKey(p => p.BusinessId)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.Cascade); // Deleting a business removes its products
 
             // Relationship: One Category can have many Products

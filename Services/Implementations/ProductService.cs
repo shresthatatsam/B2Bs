@@ -13,25 +13,33 @@ namespace B2B.Services.Implementations
         private readonly IGenericService<ProductImage> _imageRepos;
         private readonly IImageService _imageService;
         private readonly IRepository<ProductImage> _imageRepo;
+        private readonly IBusinessService _BusinessService;
+        private readonly IUserContextService _UserContextService;
 
         public ProductService(
             IGenericService<Product> service,
             IGenericService<ProductImage> imageRepos,
             IImageService imageService,
-            IRepository<ProductImage> imageRepo)
+            IRepository<ProductImage> imageRepo,
+            IBusinessService businessService,
+            IUserContextService userContextService)
         {
             _service = service;
             _imageRepos = imageRepos;
             _imageService = imageService;
             _imageRepo = imageRepo;
+            _BusinessService = businessService;
+            _UserContextService = userContextService;
         }
 
         public async Task<ProductResponseDto> CreateAsync(ProductRequestDto dto)
         {
+            var UserId = _UserContextService.GetUserId();
+            var BusinessData = await _BusinessService.GetBusinessByUserIdAsync(UserId);  
             var product = new Product
             {
                 Id = Guid.NewGuid(),
-                BusinessId = dto.BusinessId,
+                BusinessId = BusinessData.Id,
                 CategoryId = dto.CategoryId,
                 Name = dto.Name,
                 Description = dto.Description,

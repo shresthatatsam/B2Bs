@@ -21,7 +21,10 @@ namespace B2B.Helpers
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.Name)
+            new Claim(ClaimTypes.Role, user.Role.Name),
+              new Claim("userId", user.Id.ToString()),
+            new Claim("name", user.FullName ?? ""),
+               new Claim("role", user.Role.Name ?? "")
         };
 
             var key = new SymmetricSecurityKey(

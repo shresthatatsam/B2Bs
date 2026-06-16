@@ -1,11 +1,13 @@
 ﻿using B2B.DTOs.RequestDTOs.Product;
 using B2B.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace B2B.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

@@ -18,6 +18,9 @@ namespace B2B.Infrastructure.DependencyInjection
 
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IBusinessService, BusinessService>();
+
+            services.AddScoped<IUserContextService, UserContextService>();
             // later you will add:
             // services.AddScoped<IProductService, ProductService>();
             // services.AddScoped<IAuthService, AuthService>();
