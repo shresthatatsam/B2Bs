@@ -17,7 +17,7 @@ namespace B2B.Services.Implementations
                 return null;
 
             string uploadsFolder = Path.Combine(
-                _environment.WebRootPath,
+                Directory.GetCurrentDirectory(),
                 "uploads",
                 folderName);
 

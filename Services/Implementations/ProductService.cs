@@ -35,7 +35,7 @@ namespace B2B.Services.Implementations
         public async Task<ProductResponseDto> CreateAsync(ProductRequestDto dto)
         {
             var UserId = _UserContextService.GetUserId();
-            var BusinessData = await _BusinessService.GetBusinessByUserIdAsync(UserId);  
+            var BusinessData = await _BusinessService.GetBusinessByUserIdAsync(UserId);
             var product = new Product
             {
                 Id = Guid.NewGuid(),
@@ -164,16 +164,16 @@ namespace B2B.Services.Implementations
             return await GetByIdAsync(id);
         }
 
-     public async Task DeleteAsync(Guid id)
-{
-    var productImages = await _imageRepo.FindAsync(x => x.ProductId == id);
+        public async Task DeleteAsync(Guid id)
+        {
+            var productImages = await _imageRepo.FindAsync(x => x.ProductId == id);
 
-    foreach (var image in productImages)
-    {
-        await _imageRepos.DeleteAsync(image.Id);
-    }
+            foreach (var image in productImages)
+            {
+                await _imageRepos.DeleteAsync(image.Id);
+            }
 
-    await _service.DeleteAsync(id);
-}
+            await _service.DeleteAsync(id);
+        }
     }
 }

@@ -3,6 +3,7 @@ using B2B.Data.Seed;
 using B2B.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -73,6 +74,12 @@ app.UseAuthentication();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(app.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/Uploads"
+});
 app.MapControllers();
 
 app.Run();
