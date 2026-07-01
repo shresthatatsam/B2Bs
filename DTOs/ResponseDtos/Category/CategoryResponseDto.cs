@@ -1,13 +1,11 @@
-﻿namespace B2B.Entities
+﻿namespace B2B.DTOs.RequestDTOs.Category
 {
-    public class Category
+    public class CategoryResponseDto
     {
         public Guid Id { get; set; }
-
         public string Name { get; set; }
-
         public Guid BusinessId { get; set; }
 
-        public Business Business { get; set; }
+        public string BusinessName { get; set; } 
     }
 }

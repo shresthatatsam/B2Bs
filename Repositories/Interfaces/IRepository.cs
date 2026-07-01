@@ -11,5 +11,6 @@ namespace B2B.Repositories.Interfaces
         void Delete(T entity);
         Task SaveAsync();
         Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate);
     }
 }

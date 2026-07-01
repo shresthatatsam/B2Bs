@@ -16,6 +16,12 @@ namespace B2B.Data.Configurations
                    .IsRequired()
                    .HasMaxLength(75);
 
+            // Relationship: One Business can have many Products
+            builder.HasOne(p => p.Business)
+                   .WithMany() // Add ICollection<Product> inside Business if you want to link the other way later
+                   .HasForeignKey(p => p.BusinessId)
+                   .IsRequired(false);
+
             // 3. Uniqueness Constraints
             // Prevents business managers from making duplicate categories
             builder.HasIndex(c => c.Name)

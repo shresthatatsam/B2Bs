@@ -1,5 +1,6 @@
 ﻿
 
+using B2B.Entities.Product;
 using B2B.Repositories.Interfaces;
 
 namespace B2B.Repositories.Implementations

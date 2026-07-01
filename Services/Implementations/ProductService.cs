@@ -13,6 +13,7 @@ namespace B2B.Services.Implementations
         private readonly IGenericService<ProductImage> _imageRepos;
         private readonly IImageService _imageService;
         private readonly IRepository<ProductImage> _imageRepo;
+        private readonly IRepository<Product> _productRepo;
         private readonly IBusinessService _BusinessService;
         private readonly IUserContextService _UserContextService;
 
@@ -22,7 +23,8 @@ namespace B2B.Services.Implementations
             IImageService imageService,
             IRepository<ProductImage> imageRepo,
             IBusinessService businessService,
-            IUserContextService userContextService)
+            IUserContextService userContextService,
+            IRepository<Product> productRepo)
         {
             _service = service;
             _imageRepos = imageRepos;
@@ -30,6 +32,7 @@ namespace B2B.Services.Implementations
             _imageRepo = imageRepo;
             _BusinessService = businessService;
             _UserContextService = userContextService;
+            _productRepo = productRepo;
         }
 
         public async Task<ProductResponseDto> CreateAsync(ProductRequestDto dto)
@@ -87,20 +90,22 @@ namespace B2B.Services.Implementations
             };
         }
 
+
         public async Task<List<ProductResponseDto>> GetAllAsync()
         {
-            var products = await _service.GetAllAsync();
+            var userId = _UserContextService.GetUserId();
+            var businessData = await _BusinessService.GetBusinessByUserIdAsync(userId);
 
-            var productImages = await _imageRepo.FindAsync(x => true);
+            var products = await _productRepo.FindAsync(x=>x.BusinessId == businessData.Id);
+            var productIds = products.Select(p => p.Id).ToHashSet();
+
+            var productImages = await _imageRepo.FindAsync(x => productIds.Contains(x.ProductId));
 
             var imageLookup = productImages
                 .GroupBy(x => x.ProductId)
                 .ToDictionary(
                     g => g.Key,
-                    g => g.Select(i => new ProductImageDto
-                    {
-                        ImageUrl = i.ImageUrl
-                    }).ToList()
+                    g => g.Select(i => new ProductImageDto { ImageUrl = i.ImageUrl }).ToList()
                 );
 
             return products.Select(product => new ProductResponseDto
@@ -113,15 +118,20 @@ namespace B2B.Services.Implementations
                 Price = product.Price,
                 Stock = product.Stock,
                 Status = product.Status,
-                Images = imageLookup.ContainsKey(product.Id)
-                    ? imageLookup[product.Id]
+                Images = imageLookup.TryGetValue(product.Id, out var images)
+                    ? images
                     : new List<ProductImageDto>()
             }).ToList();
         }
 
+       
+
         public async Task<ProductResponseDto> GetByIdAsync(Guid id)
         {
-            var product = await _service.GetByIdAsync(id);
+            var userId = _UserContextService.GetUserId();
+            var businessData = await _BusinessService.GetBusinessByUserIdAsync(userId);
+
+            var product = await _productRepo.FindSingleAsync(x => x.BusinessId == businessData.Id && x.Id == id);
 
             if (product == null)
                 return null;
@@ -144,6 +154,8 @@ namespace B2B.Services.Implementations
                 }).ToList()
             };
         }
+       
+
         public async Task<ProductResponseDto> UpdateAsync(Guid id, ProductRequestDto dto)
         {
             var product = await _service.GetByIdAsync(id);
@@ -151,7 +163,7 @@ namespace B2B.Services.Implementations
             if (product == null)
                 return null;
 
-            product.BusinessId = dto.BusinessId;
+            // Update product information
             product.CategoryId = dto.CategoryId;
             product.Name = dto.Name;
             product.Description = dto.Description;
@@ -161,7 +173,53 @@ namespace B2B.Services.Implementations
 
             await _service.UpdateAsync(product);
 
-            return await GetByIdAsync(id);
+            // Get existing images
+            var existingImages = await _imageRepo.FindAsync(x => x.ProductId == id);
+
+            // Delete existing images from disk and database
+            if(dto.Images.Any() && dto.Images != null)
+            {
+            foreach (var image in existingImages)
+            {
+                await _imageService.DeleteAsync(image.ImageUrl, "products");
+                await _imageRepos.DeleteAsync(image.Id);
+            }
+            }
+
+            var imageUrls = new List<string>();
+
+            // Upload new images
+            if (dto.Images != null && dto.Images.Any())
+            {
+                foreach (var image in dto.Images)
+                {
+                    var imageUrl = await _imageService.UploadAsync(image, "products");
+
+                    imageUrls.Add(imageUrl);
+
+                    await _imageRepos.CreateAsync(new ProductImage
+                    {
+                        ProductId = product.Id,
+                        ImageUrl = imageUrl
+                    });
+                }
+            }
+
+            return new ProductResponseDto
+            {
+                Id = product.Id,
+                BusinessId = product.BusinessId,
+                CategoryId = product.CategoryId,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock,
+                Status = product.Status,
+                Images = imageUrls.Select(x => new ProductImageDto
+                {
+                    ImageUrl = x
+                }).ToList()
+            };
         }
 
         public async Task DeleteAsync(Guid id)

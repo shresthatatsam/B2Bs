@@ -18,7 +18,7 @@ namespace B2B.Services.Implementations
 
             string uploadsFolder = Path.Combine(
                 Directory.GetCurrentDirectory(),
-                "uploads",
+                "Uploads",
                 folderName);
 
             if (!Directory.Exists(uploadsFolder))
@@ -34,7 +34,7 @@ namespace B2B.Services.Implementations
                 await file.CopyToAsync(stream);
             }
 
-            return $"/uploads/{folderName}/{fileName}";
+            return $"/Uploads/{folderName}/{fileName}";
         }
 
     public async Task<bool> DeleteAsync(string imageUrl, string folderName)
