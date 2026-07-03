@@ -16,11 +16,12 @@ namespace B2B.Services.Implementations
         private readonly IUserContextService _UserContextService;
         private readonly IRepository<Category> _categoryRepo;
 
-        public CategoryService(IGenericService<Category> service, IBusinessService businessService, IUserContextService userContextService)
+        public CategoryService(IGenericService<Category> service, IBusinessService businessService, IUserContextService userContextService, IRepository<Category> categoryRepo)
         {
             _service = service;
             _BusinessService = businessService;
             _UserContextService = userContextService;
+            _categoryRepo = categoryRepo;
         }
 
         public async Task<CategoryResponseDto> CreateAsync(CategoryRequestDto dto)
@@ -49,7 +50,7 @@ namespace B2B.Services.Implementations
             var userId = _UserContextService.GetUserId();
             var businessData = await _BusinessService.GetBusinessByUserIdAsync(userId);
 
-            var Categories = await _categoryRepo.FindAsync(x => x.BusinessId == businessData.Id);
+            var Categories = await _categoryRepo.FindAsync(x=>x.BusinessId == businessData.Id);
             
             return Categories.Select(category => new CategoryResponseDto
             {
