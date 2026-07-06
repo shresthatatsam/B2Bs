@@ -62,7 +62,17 @@ namespace B2B.Services.Implementations
             }).ToList();
         }
 
-
+        public async Task<List<CategoryResponseDto>> GetAllUserCategoryAsync()
+        {
+            var Categories = await _categoryRepo.GetAllAsync();
+            return Categories.Select(category => new CategoryResponseDto
+            {
+                Id = category.Id,
+                BusinessId = category.BusinessId,
+                Name = category.Name,
+                BusinessName = category.Business?.BusinessName
+            }).ToList();
+        }
 
         public Task<Category> Get(Guid id) => _service.GetByIdAsync(id);
         public Task Update(Category category) => _service.UpdateAsync(category);

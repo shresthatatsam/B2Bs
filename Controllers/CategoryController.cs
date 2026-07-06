@@ -23,6 +23,10 @@ namespace B2B.Controllers
         public async Task<IActionResult> GetAll()
             => Ok(await _service.GetAllAsync());
 
+        [HttpGet("GetAllCategories")]
+        public async Task<IActionResult> GetAllCategories()
+    => Ok(await _service.GetAllUserCategoryAsync());
+
         [HttpPost]
         public async Task<IActionResult> Create(CategoryRequestDto category)
         {

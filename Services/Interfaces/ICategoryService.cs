@@ -9,6 +9,7 @@ namespace B2B.Services.Interfaces
         Task<List<CategoryResponseDto>> GetAllAsync();
         Task<Category> Get(Guid id);
         Task<CategoryResponseDto> CreateAsync(CategoryRequestDto dto);
+        Task<List<CategoryResponseDto>> GetAllUserCategoryAsync();
         Task Update(Category category);
         Task Delete(Guid id);
     }
