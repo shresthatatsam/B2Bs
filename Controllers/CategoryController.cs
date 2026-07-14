@@ -24,6 +24,7 @@ namespace B2B.Controllers
             => Ok(await _service.GetAllAsync());
 
         [HttpGet("GetAllCategories")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories()
     => Ok(await _service.GetAllUserCategoryAsync());
 

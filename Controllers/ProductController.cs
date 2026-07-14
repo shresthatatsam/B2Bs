@@ -45,6 +45,19 @@ namespace B2B.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetProductByCategoryId/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductByCategoryId(Guid id)
+        {
+            var result = await _productService.GetProductByCategoryId(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+
         // PUT: api/Product/{id}
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, [FromForm] ProductRequestDto dto)

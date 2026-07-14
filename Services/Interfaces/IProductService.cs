@@ -13,6 +13,7 @@ namespace B2B.Services.Interfaces
 
         Task<ProductResponseDto> UpdateAsync(Guid id, ProductRequestDto dto);
 
+        Task<List<ProductResponseDto>> GetProductByCategoryId(Guid id);
         Task DeleteAsync(Guid id);
     }
 }

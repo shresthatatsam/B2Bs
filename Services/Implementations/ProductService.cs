@@ -4,6 +4,7 @@ using B2B.Entities;
 using B2B.Entities.Product;
 using B2B.Repositories.Interfaces;
 using B2B.Services.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace B2B.Services.Implementations
 {
@@ -154,7 +155,45 @@ namespace B2B.Services.Implementations
                 }).ToList()
             };
         }
-       
+
+
+
+        public async Task<List<ProductResponseDto>> GetProductByCategoryId(Guid id)
+        {
+            var products = await _productRepo.FindAsync(x => x.CategoryId == id);
+
+            if (products == null || !products.Any())
+                return new List<ProductResponseDto>();
+
+            var productIds = products.Select(p => p.Id).ToHashSet();
+
+            var productImages = await _imageRepo.FindAsync(x => productIds.Contains(x.ProductId));
+
+            var imageLookup = productImages
+                .GroupBy(x => x.ProductId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(i => new ProductImageDto
+                    {
+                        ImageUrl = i.ImageUrl
+                    }).ToList()
+                );
+
+            return products.Select(product => new ProductResponseDto
+            {
+                Id = product.Id,
+                BusinessId = product.BusinessId,
+                CategoryId = product.CategoryId,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock,
+                Status = product.Status,
+                Images = imageLookup.TryGetValue(product.Id, out var images)
+                    ? images
+                    : new List<ProductImageDto>()
+            }).ToList();
+        }
 
         public async Task<ProductResponseDto> UpdateAsync(Guid id, ProductRequestDto dto)
         {
