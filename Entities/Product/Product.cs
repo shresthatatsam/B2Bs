@@ -20,6 +20,8 @@
 
         public string Status { get; set; }
 
+        public string ViewCount { get; set; }   
+
         public DateTime CreatedAt { get; set; }
     }
 }
